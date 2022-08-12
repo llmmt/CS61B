@@ -114,13 +114,76 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
+        int size = this.board.size();
+        for(int c = 0;c < size;c += 1){
+           if(oneColumnOnce(c)){
+               changed = true;
+           }
+        }
+
         checkGameOver();
         if (changed) {
             setChanged();
         }
         return changed;
     }
+    public int[][] mergedBoard = new int[][]{
+            {0,0,0,0},
+            {0,0,0,0},
+            {0,0,0,0},
+            {0,0,0,0},
+    };
+    public boolean oneColumnOnce(int c){
+        int size = this.board.size();
+        boolean changed = false;
+        for(int r = size - 2;r >= 0;r -= 1){
+            Tile rtile = this.board.tile(c,r);
+            if( rtile == null){
+                continue;
+            }
+            for(int j = r + 1;j < size;j += 1){
+                Tile jtile = this.board.tile(c,j);
+                if(jtile == null && j != size - 1){
+                    continue;
+                } else if (jtile == null && j == size - 1) {
+                     board.move(c,j,rtile);
+                     changed = true;  // ************  no merge but change the position
 
+                } else {
+                    if(jtile.value() == rtile.value()){
+                        if(merge(c,j)){
+                            scoreChange(c,r);
+                            changed = board.move(c,j,rtile);
+                        } else {
+                            board.move(c,j-1,rtile);
+                            changed = true;
+                        }
+
+                    } else {
+                        if(r != j-1){
+                            board.move(c,j-1,rtile);
+                            changed = true;// ************  no merge but change the position
+                        }
+                    }
+                }
+
+            }
+        }
+        return changed;
+    }
+    public  void scoreChange(int c,int r){
+        int score = 2 * this.board.tile(c,r).value();
+        this.score += score;
+    }
+
+    public boolean merge(int c,int j){
+        if(this.mergedBoard[c][j] == 0){
+            this.mergedBoard[c][j] = 1;
+            return true;
+        } else {
+            return false;
+        }
+    }
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
      */
@@ -175,10 +238,55 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        
+        if(Model.emptySpaceExists(b)){
+            return true;
+        }
+        int size = b.size();
+        for(int row = 0;row < size; row += 1){
+            for(int column = 0;column < size; column += 1){
+                if(b.tile(column,row) == null){
+                    continue;
+                }
+                if(adjacentSameValue(b,column,row)){
+                    return true;
+                }
+            }
+        }
         return false;
     }
-
+    public  static boolean adjacentSameValue(Board b,int column,int row){
+        int size = b.size();
+        for(int c = column - 1; c <= column + 1; c += 1) {
+            if (c < 0 || c >= size) {
+                continue;
+            }
+            if (c == column) {
+                int up = row + 1;
+                int bottom = row - 1;
+                if(up >= 0 && up < size){
+                    if(b.tile(c,up) != null){
+                        if(b.tile(c,up).value() == b.tile(column,row).value()){
+                            return true;
+                        }
+                    }
+                }
+                if(bottom >= 0 && bottom < size){
+                    if(b.tile(c,bottom) != null){
+                        if(b.tile(c,bottom).value() == b.tile(column,row).value()){
+                            return true;
+                        }
+                    }
+                }
+            } else {
+                if(b.tile(c,row) != null){
+                    if(b.tile(column,row).value() == b.tile(c,row).value()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
      /** Returns the model as a string, used for debugging. */
