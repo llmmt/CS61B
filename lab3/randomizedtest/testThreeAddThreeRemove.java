@@ -63,7 +63,7 @@ public class testThreeAddThreeRemove {
                 int lastL = L.getLast();
                 int lastB = B.getLast();
                 assertEquals(lastL,lastB);
-                
+
             } else if (operationNumber == 3 && L.size() != 0) {
                 //removeLast
                 int lastL = L.removeLast();
