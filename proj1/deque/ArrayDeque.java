@@ -103,14 +103,15 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         T result = null;
         for(int i = nextFirst + 1,j = 0;j < size;j++){
+            if(i >= items.length){
+                i = 0;
+            }
             if(j == index){
                 result = items[i];
                 break;
             }
             i += 1;
-            if(i >= items.length){
-                i = 0;
-            }
+
         }
         return result;
     }
