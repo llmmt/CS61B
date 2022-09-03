@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 
 public class ArrayLinkedListDequeTest {
-    @Test
+    /**@Test
     public void randomizedTest(){
         ArrayDeque<Integer> ad = new ArrayDeque<>();
         LinkedListDeque<Integer> lld = new LinkedListDeque<>();
@@ -32,33 +32,26 @@ public class ArrayLinkedListDequeTest {
                 assertEquals(adLast,lldLast);
 
 
-            }/** else if (operationNumber == 3 && ad.size() != 0 && lld.size() != 0) {
+            } else if (operationNumber == 3 && ad.size() != 0 && lld.size() != 0) {
                 //removeLast
                 int lastL = ad.removeLast();
                 int lastB = lld.removeLast();
                 assertEquals(lastB,lastL);
-            }*/
+            }
         }
-    }
+    }*/
 
 
     @Test
     public void test(){
         ArrayDeque<Integer> ad = new ArrayDeque<>();
-        LinkedListDeque<Integer> lld = new LinkedListDeque<>();
-        int N = 5000;
-        for(int i = 0;i < N;i++){
-            int randVal = StdRandom.uniform(0,100);
-            ad.addLast(randVal);
-            lld.addLast(randVal);
-            int adlast = ad.get(ad.size() - 1);
-            int ldlast = lld.get(lld.size() - 1);
-            assertEquals(adlast,ldlast);
-            assertEquals(randVal,adlast);
-            assertEquals(randVal,ldlast);
-            int ra = ad.removeLast();
-            int la = lld.removeLast();
-            assertEquals(ra,la);
+        for(int i = 0; i < 8;i++){
+            ad.addLast(i);
+        }
+
+        for(int i =0;i < 8;i++){
+            int actual = ad.get(i);
+            assertEquals(i,actual);
         }
     }
 
