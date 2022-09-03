@@ -133,4 +133,35 @@ public class LinkedListDequeTest {
 
 
     }
+
+    @Test
+    public void iteratorTest(){
+        LinkedListDeque<Integer> lld = new LinkedListDeque<>();
+        lld.addLast(0);
+        lld.addLast(1);
+        for(int i: lld){
+            System.out.println(i);
+        }
+    }
+
+    @Test
+    public void equalsTest(){
+        LinkedListDeque<Integer> lld = new LinkedListDeque<>();
+        lld.addLast(0);
+        lld.addLast(1);
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<>();
+        lld2.addLast(0);
+        lld2.addLast(1);
+
+        LinkedListDeque<String> s = new LinkedListDeque<>();
+        s.addLast("hello");
+        s.addLast("java");
+
+        ArrayDeque<Integer> i = new ArrayDeque<>();
+        i.addFirst(1);
+
+        boolean equal = lld.equals(i);
+
+        assertTrue(!equal);
+    }
 }

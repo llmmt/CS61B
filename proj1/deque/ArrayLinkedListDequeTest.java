@@ -46,7 +46,7 @@ public class ArrayLinkedListDequeTest {
     public void test(){
         ArrayDeque<Integer> ad = new ArrayDeque<>();
         LinkedListDeque<Integer> lld = new LinkedListDeque<>();
-        int N = 50000;
+        int N = 5000;
         for(int i = 0;i < N;i++){
             int randVal = StdRandom.uniform(0,100);
             ad.addLast(randVal);
@@ -60,5 +60,47 @@ public class ArrayLinkedListDequeTest {
             int la = lld.removeLast();
             assertEquals(ra,la);
         }
+    }
+
+    @Test
+    public void ArrayDequeIteratorTest(){
+        ArrayDeque<Integer> ad = new ArrayDeque<>();
+        ad.addLast(0);
+        ad.addLast(1);
+        ad.addLast(1);
+        ad.addLast(1);
+        ad.addLast(1);
+        ad.addLast(1);
+        ad.addLast(1);
+        ad.addLast(1);
+        for(int i:ad){
+            System.out.println(i);
+        }
+    }
+
+    @Test
+    public void ArrayDequeEqualsTest(){
+        ArrayDeque<Integer> ad = new ArrayDeque<>();
+        ad.addLast(0);
+        ad.addLast(1);
+
+        ArrayDeque<Integer> ad2 = new ArrayDeque<>();
+        ad2.addLast(0);
+        ad2.addLast(1);
+
+        boolean equal = ad.equals(ad2);
+
+        assertTrue(equal);
+
+        ad.addLast(2);
+        ad2.addLast(3);
+        ad.addLast(1);
+        ad2.addLast(1);
+        ad.addLast(1);
+        ad2.addLast(1);
+
+        equal = ad.equals(ad2);
+
+        assertTrue(!equal);
     }
 }

@@ -1,12 +1,14 @@
 package deque;
 
 
-public class ArrayDeque<T> implements Deque<T> {
+import java.util.Iterator;
 
-    private T[] items;
-    private int size;
-    private int nextFirst;
-    private int nextLast;
+public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
+
+    public T[] items;
+    public int size;
+    public int nextFirst;
+    public int nextLast;
 
     public ArrayDeque() {
         size = 0;
@@ -19,7 +21,7 @@ public class ArrayDeque<T> implements Deque<T> {
         size += 1;
         items[nextFirst] = x;
         nextFirst -= 1;
-        if(nextFirst < 0){
+        if (nextFirst < 0) {
             nextFirst = items.length - 1;
         }
     }
@@ -114,6 +116,94 @@ public class ArrayDeque<T> implements Deque<T> {
 
         }
         return result;
+    }
+
+    public Iterator<T> iterator(){
+        return new ArrayDequeIterator();
+    }
+
+    public class ArrayDequeIterator implements Iterator<T>{
+        int wizpos;
+
+        public ArrayDequeIterator(){
+            wizpos = nextFirst + 1;
+        }
+        @Override
+        public boolean hasNext() {
+            if(nextLast > nextFirst){
+                return wizpos < nextLast;
+            } else {
+                if(wizpos < size){
+                    return true;
+                } else if(wizpos - size < nextLast) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public T next() {
+            int index = 0;
+            if (nextLast > nextFirst) {
+                for (int i = nextFirst + 1,j = 0; i < nextLast; i++,j++) {
+                   if(wizpos == j){
+                       index = i;
+                       break;
+                   }
+                }
+                System.out.println(" ");
+            } else {
+                int j = 0;
+                for (int i = nextFirst + 1; i < items.length - 1; i++,j++) {
+                    if(wizpos == j){
+                        index = i;
+                        break;
+                    }
+                }
+                for (int i = 0; i < nextLast; i++,j++) {
+                    if(wizpos == j){
+                        index = i;
+                        break;
+                    }
+                }
+
+            }
+            wizpos += 1;
+            return items[index];
+        }
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof ArrayDeque)){
+            return false;
+        }
+        ArrayDeque temp = (ArrayDeque) o;
+        if(temp.size() != this.size()){
+            return false;
+        }
+        if (nextLast > nextFirst) {
+            for (int i = nextFirst + 1,j = 0; i < nextLast; i++,j++) {
+                if(! (this.get(j).equals(temp.get(j)))){
+                    return false;
+                }
+            }
+
+        } else {
+            int j = 0;
+            for (int i = nextFirst + 1; i < items.length - 1; i++,j++) {
+                if(! (this.get(j).equals(temp.get(j)))){
+                    return false;
+                }
+            }
+            for (int i = 0; i < nextLast; i++,j++) {
+                if(! (this.get(j).equals(temp.get(j)))){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
